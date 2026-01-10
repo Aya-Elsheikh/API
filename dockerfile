@@ -2,17 +2,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# نسخ solution file أولا
-COPY ["Jadwa.slnx", "./"]
-
 # نسخ كل ملفات المشاريع
 COPY ["Application/Application.csproj", "Application/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
 
-# Restore NuGet packages للـ solution
-RUN dotnet restore "Jadwa.slnx"
+# Restore NuGet packages على مشروع WebAPI
+RUN dotnet restore "WebAPI/WebAPI.csproj"
 
 # نسخ باقي الملفات
 COPY . ./
