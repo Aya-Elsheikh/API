@@ -1,20 +1,23 @@
-﻿using MediatR;
+﻿using Application.Common;
+using Application.Features.ManageGoal.Queries.GetAll;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Controllers;
 
 [ApiController]
-[Route("api")]
-public class LocationController : ControllerBase
+public class LocationController : BaseControllerAPI
 {
-    private readonly IMediator _mediator;
-
-    public LocationController(IMediator mediator)
+    #region Listing
+    [HttpGet("GetSectors")]
+    public Task<IActionResult> GetSectors()
     {
-        _mediator = mediator;
+        return HandleRequest<GetAllSectorsSelectedListQueryAPI, List<SelectedList>>(
+            new GetAllSectorsSelectedListQueryAPI());
     }
 
-    [HttpGet("Locations")]
-    public async Task<IActionResult> GetEmirates()
+    [HttpGet("GetCommunityBySectorId")]
+    public Task<IActionResult> GetCommunityBySectorId([FromQuery] GetAllCommunityBySectorIdSelectedListQueryAPI query)
     {
-        return Ok(await _mediator.Send(new GetEmiratesQuery()));
+        return HandleRequest<GetAllCommunityBySectorIdSelectedListQueryAPI, List<SelectedList>>(query);
     }
+    #endregion
 }

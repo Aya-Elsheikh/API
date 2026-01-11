@@ -8,6 +8,7 @@ public interface IApplicationDbContext
 {
     DatabaseFacade? Database { get; }
     DbSet<ApplicationUser> Users { get; }
-
+    DbSet<Sector> Sectors { get; }
+    DbSet<Community> Communities { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
