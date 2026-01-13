@@ -27,6 +27,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
     public DbSet<Sector> Sectors => Set<Sector>();
     public DbSet<Community> Communities => Set<Community>();
+    public DbSet<Activity> Activities => Set<Activity>();
+    public DbSet<ActivityCategory> ActivityCategories => Set<ActivityCategory>();
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         foreach (var entry in ChangeTracker.Entries<AuditableEntity>())

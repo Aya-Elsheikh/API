@@ -1,3 +1,4 @@
+using Application.RealEstate.Queries;
 using Infrastructure;
 using Infrastructure.External;
 using Infrastructure.Persistence;
@@ -22,7 +23,7 @@ builder.Services.AddMediatR(
 
 builder.Services.AddMediatR(
     Assembly.GetExecutingAssembly(),
-    typeof(GetEmiratesQuery).Assembly
+    typeof(GetAveragePricePerSqFtQueryAPI).Assembly
 );
 
 builder.Services.AddMediatR(
