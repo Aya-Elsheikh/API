@@ -16,20 +16,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
                     builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(
-    Assembly.GetExecutingAssembly(),
-    typeof(GetConceptsHandler).Assembly
-);
 
 builder.Services.AddMediatR(
     Assembly.GetExecutingAssembly(),
     typeof(GetAveragePricePerSqFtQueryAPI).Assembly
 );
 
-builder.Services.AddMediatR(
-    Assembly.GetExecutingAssembly(),
-    typeof(AnalyzeLocationCommand).Assembly
-);
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<JsonReferenceDataLoader>();
 builder.Services.AddHttpClient<OverpassClient>();

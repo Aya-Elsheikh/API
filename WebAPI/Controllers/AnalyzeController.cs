@@ -1,29 +1,20 @@
 ﻿using Application.FeatureAPI.ManageAnalyze.Queries.GetAll;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Controllers;
 
 [ApiController]
-[Route("api")]
 public class AnalyzeController : BaseControllerAPI
 {
-    private readonly IMediator _mediator;
+    //[HttpPost("Analyze")]
+    //public async Task<IActionResult> Analyze(AnalyzeLocationCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return Ok(result);
+    //}
 
-    public AnalyzeController(IMediator mediator)
+    [HttpGet("Analyze")]
+    public Task<IActionResult> Analyze([FromQuery] GetCalculateCostQueryAPI query)
     {
-        _mediator = mediator;
-    }
-
-    [HttpPost("Analyze")]
-    public async Task<IActionResult> Analyze(AnalyzeLocationCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return Ok(result);
-    }
-
-    [HttpGet("CalculateCost")]
-    public Task<IActionResult> CalculateCost([FromQuery] GetCalculateCostQueryAPI query)
-    {
-        return HandleRequest<GetCalculateCostQueryAPI, double>(query);
+        return HandleRequest<GetCalculateCostQueryAPI, AnalyzeResultDTO>(query);
     }
 }

@@ -5,65 +5,71 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
 {
     public record GetCalculateCostQueryAPI(
-        double Area,
         int CommunityId,
         int ActivityId,
         int ActivityCategoryId,
+        double Area,
         double AnnualRent
-    ) : IRequest<double>;
+    ) : IRequest<AnalyzeResultDTO>;
 
     public class GetCalculateCostQueryAPIHandler
-        : IRequestHandler<GetCalculateCostQueryAPI, double>
+        : IRequestHandler<GetCalculateCostQueryAPI, AnalyzeResultDTO>
     {
         private const double LicenseCost = 30000;
         private const double EmploymentCost = 28000;
         private const double RiskFactor = 1.3;
+        private const int SuccessfulCaseFactor = 50;
 
         private readonly IApplicationDbContext _context;
-
-        public GetCalculateCostQueryAPIHandler(IApplicationDbContext context)
+        private readonly IMediator _mediator;
+        public GetCalculateCostQueryAPIHandler(IApplicationDbContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
 
-        public async Task<double> Handle(
-            GetCalculateCostQueryAPI request,
-            CancellationToken cancellationToken)
+        public async Task<AnalyzeResultDTO> Handle(GetCalculateCostQueryAPI request, CancellationToken cancellationToken)
         {
-            var sectorFactor = await _context.Communities
+            var community = await _context.Communities
+                .Include(c => c.Sector)
                 .AsNoTracking()
                 .Where(c => c.Id == request.CommunityId)
-                .Select(c => c.Sector.Factor)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (sectorFactor == 0)
-                throw new Exception("Sector factor not found");
+            if (community == null)
+                throw new Exception("community not found");
 
-            var activityFactor = await _context.ActivityCategories
+            var activity = await _context.ActivityCategories
                 .AsNoTracking()
                 .Where(a => a.Id == request.ActivityCategoryId)
-                .Select(a => a.Factor)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (activityFactor == 0)
-                throw new Exception("Activity factor not found");
+            if (activity == null)
+                throw new Exception("Activity not found");
 
-            double setupCost =
-                request.Area * sectorFactor * activityFactor;
+            double setupCost = request.Area * community.Sector.Factor * activity.Factor;
 
-            double rentWithExtra =
-                request.AnnualRent * 1.2;
+            double rentWithExtra = request.AnnualRent * 1.2;
 
-            double totalBeforeRisk =
-                setupCost
-                + rentWithExtra
-                + LicenseCost
-                + EmploymentCost;
+            double totalBeforeRisk = setupCost + rentWithExtra + LicenseCost + EmploymentCost;
 
-            double totalCost =
-                totalBeforeRisk * RiskFactor;
+            double totalCost = totalBeforeRisk * RiskFactor;
 
-            return Math.Round(totalCost, 2);
+            // Get competitors count
+            var competitorsResult = await _mediator.Send(
+            new GetCompetitorsQuery { Lat = community.Latitude, Lng = community.Longitude, Category = activity.NameE.ToLower(), Radius = 500 }, cancellationToken);
+
+            int competitorsCount = competitorsResult +1;
+
+            int successfulCases =
+                competitorsCount * SuccessfulCaseFactor;
+
+            return new AnalyzeResultDTO
+            {
+                TotalCost = Math.Round(totalCost, 2),
+                SuccessfulCases = successfulCases,
+                CompetitorsCount = competitorsCount,
+            };
         }
     }
 }

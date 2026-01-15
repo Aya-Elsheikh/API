@@ -1,5 +1,5 @@
 ﻿using MediatR;
-public class AnalyzeLocationCommand : IRequest<AnalyzeResponse>
+public class AnalyzeLocationCommand : IRequest<AnalyzeResultDTO>
 {
     public int LocationId { get; set; }
     public int AreaId { get; set; }     
@@ -7,7 +7,7 @@ public class AnalyzeLocationCommand : IRequest<AnalyzeResponse>
     public int SizeSqft { get; set; }
 }
 public class AnalyzeLocationHandler
-    : IRequestHandler<AnalyzeLocationCommand, AnalyzeResponse>
+    : IRequestHandler<AnalyzeLocationCommand, AnalyzeResultDTO>
 {
     private readonly IMediator _mediator;
     private readonly ICompetitionService _competitionService;
@@ -23,7 +23,7 @@ public class AnalyzeLocationHandler
         _scoring = scoring;
     }
 
-    public async Task<AnalyzeResponse> Handle(
+    public async Task<AnalyzeResultDTO> Handle(
         AnalyzeLocationCommand request,
         CancellationToken ct)
     {
@@ -48,7 +48,7 @@ public class AnalyzeLocationHandler
             accessibilityScore,
             rentalScore);
 
-        return new AnalyzeResponse
+        return new AnalyzeResultDTO
         {
             Score = totalScore,
             Recommendation = totalScore >= 70 ? "Strong" : "Medium"
