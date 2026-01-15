@@ -40,6 +40,7 @@ namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
                 throw new Exception("community not found");
 
             var activity = await _context.ActivityCategories
+                .Include(a => a.Activity)
                 .AsNoTracking()
                 .Where(a => a.Id == request.ActivityCategoryId)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -64,10 +65,20 @@ namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
             int successfulCases =
                 competitorsCount * SuccessfulCaseFactor;
 
+            double populationFactor = community.PopulationTotal; 
+
+            if (request.ActivityId == 5)
+                populationFactor = community.PopulationMale;
+            else if (request.ActivityId == 6)
+                populationFactor = community.PopulationFemale;
+
+            double score = (populationFactor * 1.3) * (activity.Activity.Penetration / 100.0) / successfulCases;
+
             return new AnalyzeResultDTO
             {
                 TotalCost = Math.Round(totalCost, 2),
                 SuccessfulCases = successfulCases,
+                Score = Math.Round(score, 2),
                 CompetitorsCount = competitorsCount,
             };
         }
