@@ -21,6 +21,15 @@ builder.Services.AddMediatR(
     Assembly.GetExecutingAssembly(),
     typeof(GetAveragePricePerSqFtQueryAPI).Assembly
 );
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowCrossOrigin", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<JsonReferenceDataLoader>();
@@ -39,6 +48,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger"; 
 });
 
+app.UseCors("AllowCrossOrigin");
 app.UseAuthorization();
 app.MapControllers();
 
