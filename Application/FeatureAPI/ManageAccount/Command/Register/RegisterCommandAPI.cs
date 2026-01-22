@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 
 public class RegisterCommandAPI : IRequest<LoginResultDTO>
 {
+    public string Name { get; set; } = string.Empty;
+    public string UserName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
@@ -32,7 +34,8 @@ public class RegisterCommandHandler
 
         var user = new ApplicationUser
         {
-            UserName = request.Email,
+            Name = request.Name,
+            UserName = request.UserName,
             Email = request.Email,
             PhoneNumber = request.Phone,
             Active = true,
@@ -48,7 +51,8 @@ public class RegisterCommandHandler
 
         return new LoginResultDTO
         {
-            UserName = user.Email,
+            Name = user.Name,
+            UserName = user.UserName,
             Token = token,
             Expiration = DateTime.UtcNow.AddHours(2)
         };
