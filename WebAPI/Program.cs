@@ -23,13 +23,15 @@ builder.Services.AddMediatR(
 );
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowCrossOrigin", builder =>
+    options.AddPolicy("AllowCrossOrigin", policy =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .SetIsOriginAllowed(_ => true);
     });
 });
+
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddSingleton<JsonReferenceDataLoader>();
@@ -47,6 +49,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Jadwa API V1");
     c.RoutePrefix = "swagger"; 
 });
+app.UseHttpsRedirection();
 
 app.UseRouting();               
 app.UseCors("AllowCrossOrigin");
