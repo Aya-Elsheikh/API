@@ -48,6 +48,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = "swagger"; 
 });
 
+app.UseRouting();               
 app.UseCors("AllowCrossOrigin");
 app.UseAuthorization();
 app.MapControllers();
