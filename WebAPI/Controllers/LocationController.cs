@@ -21,10 +21,10 @@ public class LocationController : BaseControllerAPI
         return HandleRequest<GetAllCommunityBySectorIdSelectedListQueryAPI, List<SelectedList>>(query);
     }
 
-    [HttpGet("GetAveragePricePerSqFtQueryAPI")]
-    public Task<IActionResult> GetAveragePricePerSqFtQueryAPI([FromQuery] GetAveragePricePerSqFtQueryAPI query)
-    {
-        return HandleRequest<GetAveragePricePerSqFtQueryAPI, double?>(query);
-    }
+    //[HttpGet("GetAveragePricePerSqFtQueryAPI")]
+    //public Task<IActionResult> GetAveragePricePerSqFtQueryAPI([FromQuery] GetAveragePricePerSqFtQueryAPI query)
+    //{
+    //    return HandleRequest<GetAveragePricePerSqFtQueryAPI, double?>(query);
+    //}
     #endregion
 }

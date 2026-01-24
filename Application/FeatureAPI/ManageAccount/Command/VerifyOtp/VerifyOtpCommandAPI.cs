@@ -3,6 +3,7 @@ using Application.FeatureAPI.ManageAccount.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 public class VerifyOtpCommandAPI : IRequest<LoginResultDTO>
 {
@@ -30,14 +31,14 @@ public class VerifyOtpCommandAPIHandler : IRequestHandler<VerifyOtpCommandAPI, L
         var email = request.Email.Trim().ToLower();
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
-            throw new InvalidOperationException("المستخدم غير موجود");
+            throw new ValidationException("المستخدم غير موجود");
 
         if (user.OtpExpiry < DateTime.UtcNow)
-            throw new InvalidOperationException("OTP منتهي");
+            throw new ValidationException("OTP منتهي");
 
         var verify = _passwordHasher.VerifyHashedPassword(user, user.Otp!, request.Otp);
         if (verify != PasswordVerificationResult.Success)
-            throw new InvalidOperationException("OTP غير صحيح");
+            throw new ValidationException("OTP غير صحيح");
 
         user.Active = true;
         user.EmailConfirmed = true;

@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 [Route("api")]
 public class PopulationController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    //private readonly IMediator _mediator;
 
-    public PopulationController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    //public PopulationController(IMediator mediator)
+    //{
+    //    _mediator = mediator;
+    //}
 
-    [HttpGet("Populations")]
-    public async Task<IActionResult> GetPopulations()
-    {
-        return Ok(await _mediator.Send(new GetPopulationsQuery()));
-    }
+    //[HttpGet("Populations")]
+    //public async Task<IActionResult> GetPopulations()
+    //{
+    //    return Ok(await _mediator.Send(new GetPopulationsQuery()));
+    //}
 }
