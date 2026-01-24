@@ -1,7 +1,10 @@
+using Application.Comman.Constants;
+using Application.Comman.Interfaces;
 using Application.RealEstate.Queries;
 using Infrastructure;
 using Infrastructure.External;
 using Infrastructure.Persistence;
+using Infrastructure.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -31,6 +34,19 @@ builder.Services.AddCors(options =>
             .SetIsOriginAllowed(_ => true);
     });
 });
+var smtpSettings = new SmtpSettings
+{
+    Host = "smtp.gmail.com",
+    Port = 587,
+    Username = "jadwah2030@gmail.com",
+    Password = "hpch twio vchs bnbp",
+    EnableSsl = true,
+    FromEmail = "jadwah2030@gmail.com",
+    FromName = "Jadwah"
+};
+
+builder.Services.AddSingleton(smtpSettings);
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -40,6 +56,7 @@ builder.Services.AddHttpClient<OverpassClient>();
 builder.Services.AddScoped<ICompetitionService, CompetitionService>();
 builder.Services.AddScoped<IScoringService, ScoringService>();
 builder.Services.AddHttpClient<GooglePlacesClient>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 var app = builder.Build();
 

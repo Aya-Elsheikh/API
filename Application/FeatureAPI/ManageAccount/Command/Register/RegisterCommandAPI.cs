@@ -51,8 +51,8 @@ public class RegisterCommandHandler
 
         return new LoginResultDTO
         {
-            Name = user.Name,
-            UserName = user.UserName,
+            //Name = user.Name,
+            //UserName = user.UserName,
             Token = token,
             Expiration = DateTime.UtcNow.AddHours(2)
         };

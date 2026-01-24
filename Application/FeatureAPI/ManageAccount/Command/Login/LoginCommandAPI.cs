@@ -45,8 +45,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommandAPI, LoginResultD
 
         return new LoginResultDTO
         {
-            Name = user.Name,
-            UserName = user.UserName,
+            //Name = user.Name,
+            //UserName = user.UserName,
             Token = token,
             Expiration = DateTime.UtcNow.AddHours(2)
         };

@@ -18,17 +18,15 @@ public class ApplicationUser : IdentityUser<Guid>
     public int LoginCount { get; set; } = 0;
     public DateTime LastLoginDate { get; set; } = DateTime.Now;
     public DateTime LastLogoutDate { get; set; } = DateTime.Now;
-    //public int? EntityId { get; set; }
+    public string? Otp { get; set; }
+    public DateTime? OtpExpiry { get; set; }
     public bool Admin { get; set; } = false;
     public bool IsCitizen { get; set; } = false;
-    public int SortIndex { get; set; } = 0;
-    public bool NewsLetterSubscribe { get; set; } = false;
-    public DateTime? NewsLetterSubscribeDate { get; set; }
     public bool Locked { get; set; } = false;
+    public int SortIndex { get; set; } = 0;
     public bool Focus { get; set; } = false;
     public bool Active { get; set; } = true;
-    public int? UserTypeId { get; set; }
-    public string? NsdbCode { get; set; }
+
     //identity  
     public ICollection<ApplicationUserRole>? UserRoles { get; set; }
     public ApplicationUser? Owner { get; set; }

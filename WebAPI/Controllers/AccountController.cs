@@ -6,17 +6,28 @@ using WebAPI.Controllers;
 public class AccountController : BaseControllerAPI
 {
     #region Authentication
+    //[HttpPost("Login")]
+    //public Task<IActionResult> Login([FromBody] LoginCommandAPI command)
+    //{
+    //    return HandleRequest<LoginCommandAPI, LoginResultDTO>(command);
+    //}
 
-    [HttpPost("Login")]
-    public Task<IActionResult> Login([FromBody] LoginCommandAPI command)
+    //[HttpPost("Register")]
+    //public Task<IActionResult> Register([FromBody] RegisterCommandAPI command)
+    //{
+    //    return HandleRequest<RegisterCommandAPI, LoginResultDTO>(command);
+    //}
+
+    [HttpPost("SendOtp")]
+    public Task<IActionResult> SendOtp([FromBody] SendOtpCommandAPI command)
     {
-        return HandleRequest<LoginCommandAPI, LoginResultDTO>(command);
+        return HandleRequest<SendOtpCommandAPI, bool>(command);
     }
 
-    [HttpPost("Register")]
-    public Task<IActionResult> Register([FromBody] RegisterCommandAPI command)
+    [HttpPost("VerifyOtp")]
+    public Task<IActionResult> VerifyOtp([FromBody] VerifyOtpCommandAPI command)
     {
-        return HandleRequest<RegisterCommandAPI, LoginResultDTO>(command);
+        return HandleRequest<VerifyOtpCommandAPI, LoginResultDTO>(command);
     }
 
     #endregion
