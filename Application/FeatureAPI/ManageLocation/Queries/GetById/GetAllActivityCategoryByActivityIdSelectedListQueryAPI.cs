@@ -21,7 +21,7 @@ namespace Application.Features.ManageGoal.Queries.GetAll
         public async Task<List<SelectedList>> Handle(GetAllActivityCategoryByActivityIdSelectedListQueryAPI request, CancellationToken cancellationToken)
         {
             var items = await _context.ActivityCategories.AsNoTracking()
-                .Where(x => x.Active && (request.ActivityId == null || request.ActivityId == 0 || x.ActivityId == request.ActivityId))
+                .Where(x => x.Active && x.ActivityId == request.ActivityId)
                 .Select(x => new SelectedList { Id = x.Id, NameA = x.NameA, NameE = x.NameE })
                 .OrderBy(x => x.NameA)
                 .ToListAsync();

@@ -61,10 +61,12 @@ namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
             // Get competitors count
             var competitorsResult = await _mediator.Send(
             new GetCompetitorsQuery
-            { Lat = community.Latitude, 
-              Lng = community.Longitude,
-              Category = activity.Activity.NameE.ToLower(), 
-              Radius = request.Area }
+            {
+                Lat = community.Latitude,
+                Lng = community.Longitude,
+                Category = activity.Activity?.NameE?.ToLower() ?? string.Empty,
+                Radius = request.Area
+            }
             , cancellationToken);
 
             int competitorsCount = competitorsResult +1;
@@ -79,7 +81,7 @@ namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
             else if (request.ActivityId == 6)
                 populationFactor = community.PopulationFemale;
 
-            double score = (populationFactor * 1.3) * (activity.Activity.Penetration / 100.0) / successfulCases;
+            double score = (populationFactor * 1.3) * (activity.Activity!.Penetration / 100.0) / successfulCases;
 
             LocationHeaderDTO location = new LocationHeaderDTO
             {
