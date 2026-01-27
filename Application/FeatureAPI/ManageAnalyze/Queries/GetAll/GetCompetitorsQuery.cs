@@ -24,21 +24,42 @@
             GetCompetitorsQuery request,
             CancellationToken cancellationToken)
         {
-            var osmTag = request.Category switch
+            var osmTag = request.Category.ToLower() switch
             {
                 "restaurant" => @"[""amenity""=""restaurant""]",
-                "cafe" => @"[""amenity""=""cafe""]",
+                "coffee shop / cafe" => @"[""amenity""=""cafe""]",
+                "grocery store" => @"[""shop""=""supermarket""]",
+                "laundry service" => @"[""shop""=""laundry""]",
+                "men salon" => @"[""shop""=""hairdresser""]",
+                "beauty salon / ladies" => @"[""shop""=""beauty_salon""]",
+                "fashion boutique" => @"[""shop""=""clothes""]",
+                "fitness center" => @"[""leisure""=""fitness_centre""]",
+                "tech service / repair" => @"[""shop""=""electronics""]",
+                "florist" => @"[""shop""=""florist""]",
+                "pharmacy" => @"[""amenity""=""pharmacy""]",
+                "general medical clinic" => @"[""amenity""=""clinic""]",
+                "dental clinic" => @"[""amenity""=""dentist""]",
+                "poly clinic" => @"[""amenity""=""clinic""]",
+                "specialized med. center" => @"[""amenity""=""hospital""]",
+                "dermatology & aesthetic" => @"[""amenity""=""clinic""]",
+                "medical laboratory" => @"[""amenity""=""clinic""]",
+                "physiotherapy & rehab" => @"[""amenity""=""clinic""]",
+                "pediatric clinic" => @"[""amenity""=""clinic""]",
+                "veterinary clinic" => @"[""amenity""=""veterinary""]",
+                "home healthcare" => @"[""healthcare""=""homecare""]",
+                "nutrition & diet center" => @"[""amenity""=""clinic""]",
+                "optical shop / eye care‏" => @"[""shop""=""optician""]",
                 _ => @"[""amenity""=""restaurant""]"
             };
 
             var query = $@"
-[out:json][timeout:100];
-(
-  node{osmTag}(around:{request.Radius},{request.Lat},{request.Lng});
-  way{osmTag}(around:{request.Radius},{request.Lat},{request.Lng});
-);
-out tags;
-";
+                [out:json][timeout:100];
+                (
+                  node{osmTag}(around:{request.Radius},{request.Lat},{request.Lng});
+                  way{osmTag}(around:{request.Radius},{request.Lat},{request.Lng});
+                );
+                out tags;
+                ";
 
             using var content = new FormUrlEncodedContent(
                 new Dictionary<string, string>
