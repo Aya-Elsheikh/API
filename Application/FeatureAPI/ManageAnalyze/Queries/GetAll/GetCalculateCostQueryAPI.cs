@@ -21,6 +21,8 @@ namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
         private const double RiskFactor = 1.3;
         private const int SuccessfulCaseFactor = 50;
         private const double AnnualRent = 20000;
+        private const double FeetPrice = 200;
+
 
         private readonly IApplicationDbContext _context;
         private readonly IMediator _mediator;
@@ -83,6 +85,12 @@ namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
 
             double score = (populationFactor * 1.3) * (activity.Activity!.Penetration / 100.0) / successfulCases;
 
+            double ppf = (((activity.Factor * 4) + FeetPrice) * community.Factor) / 1000;
+
+            double raw = ppf * score;
+
+            double prof = raw > 0 ? (raw / (raw + 5)) * 10 : 0;
+
             LocationHeaderDTO location = new LocationHeaderDTO
             {
                 LocationA = community.NameA,
@@ -104,6 +112,9 @@ namespace Application.FeatureAPI.ManageAnalyze.Queries.GetAll
                 TotalCost = Math.Round(totalCost, 2),
                 SuccessfulCases = successfulCases,
                 Score = Math.Round(score, 2),
+                PPF = Math.Round(ppf, 2),
+                Raw = Math.Round(raw, 2),
+                Prof = Math.Round(prof, 2),
                 CompetitorsCount = competitorsCount,
             };
         }

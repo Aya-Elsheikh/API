@@ -7,6 +7,9 @@ public class AnalyzeResultDTO
     public int SuccessfulCases { get; set; }
     public int CompetitorsCount { get; set; }
     public double Score { get; set; }
+    public double PPF { get; set; }
+    public double Raw { get; set; }
+    public double Prof { get; set; }
     public string Recommendation { get; set; } = string.Empty;
     public List<string> Pros { get; set; } = new();
     public List<string> Cons { get; set; } = new();
